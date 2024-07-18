@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -30,33 +31,37 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validations = Validator::make($request->all(), [
-            'name' => 'required|min:3',
-            'email' => 'required|min:3|unique:users',
-            'password' => 'required|min:3',
-            'cpf' => 'nullable',
-            'gender' => 'nullable',
-            'birthdate' => 'nullable',
-            'city_id' => 'nullable',
-            'state_id' => 'nullable'
-        ]);
-
-        if ($validations->fails()) {
-            return response()->json(['message' => 'A validação falhou.']);
+        try  {
+            $validations = Validator::make($request->all(), [
+                'name' => 'required|min:3',
+                'email' => 'required|min:3|unique:users',
+                'password' => 'required|min:3',
+                'cpf' => 'nullable',
+                'gender' => 'nullable',
+                'birthdate' => 'nullable',
+                'city_id' => 'nullable',
+                'state_id' => 'nullable'
+            ]);
+    
+            if ($validations->fails()) {
+                return response()->json(['message' => 'A validação falhou.']);
+            }
+    
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'cpf' => $request->cpf,
+                'gender' => $request->gender,
+                'birthdate' => $request->birthdate,
+                'city_id' => $request->city_id,
+                'state_id' => $request->state_id
+            ]);
+    
+            return response()->json($user);
+        } catch(Exception $e) {
+            return response()->json(['message' => 'error', $e], 500);
         }
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'cpf' => $request->cpf,
-            'gender' => $request->gender,
-            'birthdate' => $request->birthdate,
-            'city_id' => $request->city_id,
-            'state_id' => $request->state_id
-        ]);
-
-        return response()->json($user);
     }
 
     /**
