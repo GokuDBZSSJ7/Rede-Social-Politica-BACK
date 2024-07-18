@@ -11,4 +11,7 @@ Route::post('register', [UserController::class, 'store']);
 
 Route::group(['middleware' => ['auth:sanctum', 'access_control']], function () {
     Route::resource('users', UserController::class);
+    Route::get('me', [AuthController::class, 'me']);
+    Route::get('logout', [AuthController::class, 'logout']);
+    Route::get('refresh', [AuthController::class, 'refresh']);
 });
