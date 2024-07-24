@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('acronym');
-            $table->date('founding_date')->nullable();
-            $table->text('founders')->nullable();
-            $table->text('description')->nullable();
-            $table->text('statute')->nullable();
+            $table->date('founding_date');
+            $table->text('founders');
+            $table->text('description');
+            $table->text('statute');
             $table->timestamps();
         });
     }

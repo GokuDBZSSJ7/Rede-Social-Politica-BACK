@@ -14,8 +14,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post = Post::all();
-        return response()->json($post);
+        try {
+            $post = Post::all();
+            return response()->json($post);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'error', $e], 500);
+        }
     }
 
     /**
@@ -59,8 +63,12 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::find($id);
-        return response()->json($post);
+        try {
+            $post = Post::find($id);
+            return response()->json($post);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'error', $e], 500);
+        }
     }
 
     /**
@@ -76,7 +84,13 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $post  = Post::find($id);
+        try {
+            $post  = Post::find($id);
+            $post->update($request->all());
+            return response()->json(['message' => 'Atualizaco com sucesso']);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'error', $e], 500);
+        }
     }
 
     /**
@@ -84,6 +98,12 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $post = Post::find($id);
+            $post->delete();
+            return response()->json(['message' => 'Deletado com sucesso!']);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'error', $e], 500);
+        }
     }
 }

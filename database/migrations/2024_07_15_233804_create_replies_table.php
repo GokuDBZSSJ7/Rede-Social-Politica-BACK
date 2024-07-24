@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('replies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('comment_id')->constrained('comments')->onDelete('cascade');
+            $table->string("text");
             $table->timestamps();
         });
     }

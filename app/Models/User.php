@@ -50,4 +50,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function states()
+    {
+        return $this->hasOne(State::class);
+    }
+
+    public function cities()
+    {
+        return $this->hasOne(City::class);
+    }
 }

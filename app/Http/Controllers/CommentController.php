@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,8 +14,12 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comment = Comment::all();
-        return response()->json($comment);
+        try {
+            $comment = Comment::all();
+            return response()->json($comment);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'error', $e], 500);
+        }
     }
 
     /**
@@ -30,27 +35,31 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        $validations = Validator::make([
-            'attachment' => 'nullable|string',
-            'text' => 'required|string',
-            'post_id' => 'required',
-            'user_id' => 'required'
-        ]);
+        try {
+            $validations = Validator::make([
+                'attachment' => 'nullable|string',
+                'text' => 'required|string',
+                'post_id' => 'required',
+                'user_id' => 'required'
+            ]);
 
-        if ($validations->fails()) {
-            return response()->json(['message' => 'Erro de validação']);
+            if ($validations->fails()) {
+                return response()->json(['message' => 'Erro de validação']);
+            }
+
+            $comment = Comment::create($request->all(), [
+                'attachment' => $request->attachment,
+                'text' => $request->text,
+                'likes' => $request->likes,
+                'deslikes' => $request->deslikes,
+                'post_id' => $request->post_id,
+                'user_id' => $request->user_id
+            ]);
+
+            return response()->json($comment);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'error', $e], 500);
         }
-
-        $comment = Comment::create($request->all(), [
-            'attachment' => $request->attachment,
-            'text' => $request->text,
-            'likes' => $request->likes,
-            'deslikes' => $request->deslikes,
-            'post_id' => $request->post_id,
-            'user_id' => $request->user_id
-        ]);
-
-        return response()->json($comment);
     }
 
     /**
@@ -58,7 +67,12 @@ class CommentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $comment = Comment::find($id);
+            return response()->json($comment);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'error', $e], 500);
+        }
     }
 
     /**
@@ -74,7 +88,13 @@ class CommentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $comment = Comment::find($id);
+            $comment->update($request->all());
+            return response()->json($comment);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'error', $e], 500);
+        }
     }
 
     /**
@@ -82,6 +102,12 @@ class CommentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $comment = Comment::find($id);
+            $comment->delete();
+            return response()->json($comment);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'error', $e], 500);
+        }
     }
 }

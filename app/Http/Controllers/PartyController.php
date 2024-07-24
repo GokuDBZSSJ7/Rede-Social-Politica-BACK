@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Party;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class UserController extends Controller
+class PartyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $user = User::all();
-            return response()->json($user);
+            $party = Party::all();
+            return response()->json($party);
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
         }
@@ -36,33 +36,29 @@ class UserController extends Controller
     public function store(Request $request)
     {
         try {
-            $validations = Validator::make($request->all(), [
-                'name' => 'required|min:3',
-                'email' => 'required|min:3|unique:users',
-                'password' => 'required|min:3',
-                'cpf' => 'nullable',
-                'gender' => 'nullable',
-                'birthdate' => 'nullable',
-                'city_id' => 'nullable',
-                'state_id' => 'nullable'
+            $validations = Validator::make([
+                'name' => 'required|string',
+                'acronym' => 'required',
+                'founding_date' => 'required|date',
+                'founders' => 'required',
+                'description' => 'required|string',
+                'statute' => 'required'
             ]);
 
             if ($validations->fails()) {
-                return response()->json(['message' => 'A validação falhou.']);
+                return response()->json(['message' => 'Erro de validação']);
             }
 
-            $user = User::create([
+            $party = Party::create($request->all(), [
                 'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-                'cpf' => $request->cpf,
-                'gender' => $request->gender,
-                'birthdate' => $request->birthdate,
-                'city_id' => $request->city_id,
-                'state_id' => $request->state_id
+                'acronym' => $request->acronym,
+                'founding_date' => $request->founding_date,
+                'founders' => $request->founders,
+                'description' => $request->description,
+                'statute' => $request->statute
             ]);
 
-            return response()->json($user);
+            return response()->json($party);
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
         }
@@ -74,8 +70,8 @@ class UserController extends Controller
     public function show(string $id)
     {
         try {
-            $user = User::find($id);
-            return response()->json($user);
+            $party = Party::find($id);
+            return response()->json($party);
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
         }
@@ -95,9 +91,9 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $user  = User::find($id);
-            $user->update($request->all());
-            return response()->json(['message' => 'Atualizaco com sucesso']);
+            $party = Party::find($id);
+            $party->update($request->all());
+            return response()->json(['message' => 'Atualizado com sucesso!']);
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
         }
@@ -109,8 +105,9 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         try {
-            $user = User::find($id);
-            $user->delete();
+            $party = Party::find($id);
+
+            $party->delete();
             return response()->json(['message' => 'Deletado com sucesso']);
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
