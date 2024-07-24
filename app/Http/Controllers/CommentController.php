@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
 {
@@ -29,7 +30,27 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validations = Validator::make([
+            'attachment' => 'nullable|string',
+            'text' => 'required|string',
+            'post_id' => 'required',
+            'user_id' => 'required'
+        ]);
+
+        if ($validations->fails()) {
+            return response()->json(['message' => 'Erro de validação']);
+        }
+
+        $comment = Comment::create($request->all(), [
+            'attachment' => $request->attachment,
+            'text' => $request->text,
+            'likes' => $request->likes,
+            'deslikes' => $request->deslikes,
+            'post_id' => $request->post_id,
+            'user_id' => $request->user_id
+        ]);
+
+        return response()->json($comment);
     }
 
     /**

@@ -33,12 +33,12 @@ class PostController extends Controller
     {
         try {
             $validations = Validator::make($request->all(), [
-                 'description' => 'required|string',
-                 'image_url' => 'string|nullable',
-                 'user_id' => 'required'
+                'description' => 'required|string',
+                'image_url' => 'string|nullable',
+                'user_id' => 'required'
             ]);
 
-            if($validations->fails()){
+            if ($validations->fails()) {
                 return response()->json(['message' => 'A validação falhou']);
             }
 
@@ -49,7 +49,7 @@ class PostController extends Controller
             ]);
 
             return response()->json($post);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
         }
     }
@@ -76,7 +76,7 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $post  = Post::find($id);
     }
 
     /**
