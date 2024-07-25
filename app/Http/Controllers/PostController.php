@@ -52,6 +52,8 @@ class PostController extends Controller
                 'user_id' => $request->user_id
             ]);
 
+            $post->load('user');
+
             return response()->json($post);
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
