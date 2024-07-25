@@ -12,7 +12,9 @@ class Post extends Model
     protected $fillable = [
         'description',
         'image_url',
-        'user_id'
+        'user_id',
+        'likes',
+        'dislikes'
     ];
 
     protected $with = [

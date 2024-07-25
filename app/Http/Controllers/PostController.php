@@ -49,6 +49,8 @@ class PostController extends Controller
             $post = Post::create([
                 'description' => $request->description,
                 'image_url' => $request->image_url,
+                'likes' => 0,
+                'dislikes' => 0,
                 'user_id' => $request->user_id
             ]);
 
