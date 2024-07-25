@@ -15,8 +15,12 @@ class Post extends Model
         'user_id'
     ];
 
+    protected $with = [
+        'user'
+    ];
+
     public function user()
     {
-        return $this->hasOne(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
