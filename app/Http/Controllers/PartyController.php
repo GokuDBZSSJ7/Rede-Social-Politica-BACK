@@ -36,26 +36,30 @@ class PartyController extends Controller
     public function store(Request $request)
     {
         try {
-            $validations = Validator::make($request->all(),[
+            $validations = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'acronym' => 'required',
                 'founding_date' => 'required|date',
                 'founders' => 'required',
                 'description' => 'required|string',
-                'statute' => 'required'
+                'statute' => 'required',
+                'state_id' => 'required',
+                'city_id' => 'required'
             ]);
 
             if ($validations->fails()) {
                 return response()->json(['message' => 'Erro de validação']);
             }
 
-            $party = Party::create( [
+            $party = Party::create([
                 'name' => $request->name,
                 'acronym' => $request->acronym,
                 'founding_date' => $request->founding_date,
                 'founders' => $request->founders,
                 'description' => $request->description,
-                'statute' => $request->statute
+                'statute' => $request->statute,
+                'state_id' => $request->state_id,
+                'city_id' => $request->city_id
             ]);
 
             return response()->json($party);
