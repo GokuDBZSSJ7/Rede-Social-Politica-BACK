@@ -36,7 +36,7 @@ class PartyController extends Controller
     public function store(Request $request)
     {
         try {
-            $validations = Validator::make([
+            $validations = Validator::make($request->all(),[
                 'name' => 'required|string',
                 'acronym' => 'required',
                 'founding_date' => 'required|date',
@@ -49,7 +49,7 @@ class PartyController extends Controller
                 return response()->json(['message' => 'Erro de validação']);
             }
 
-            $party = Party::create($request->all(), [
+            $party = Party::create( [
                 'name' => $request->name,
                 'acronym' => $request->acronym,
                 'founding_date' => $request->founding_date,

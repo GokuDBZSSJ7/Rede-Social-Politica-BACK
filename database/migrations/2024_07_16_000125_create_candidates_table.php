@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('party_id')->constrained('parties')->onDelete('cascade');
             $table->string('electoral_affiliation')->nullable();
             $table->string('electoral_number')->nullable();
+            $table->string('status')->default('pendente');
             $table->timestamps();
         });
     }
