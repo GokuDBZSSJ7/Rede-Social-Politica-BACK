@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PartyController;
@@ -16,8 +17,9 @@ Route::get('logout', [AuthController::class, 'logout']);
 Route::resource('post', PostController::class);
 Route::resource('office', OfficeController::class);
 Route::resource('party', PartyController::class);
-route::resource('city', CityController::class);
-route::resource('state', StateController::class);
+Route::resource('city', CityController::class);
+Route::resource('state', StateController::class);
+Route::resource('candidates', CandidateController::class);
 
 Route::get('cityPerStateId/{id}', [CityController::class, 'getCitiesByState']);
 

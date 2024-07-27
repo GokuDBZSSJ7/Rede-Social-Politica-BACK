@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('age');
             $table->string('education');
             $table->text('experience');
-            $table->foreignId('position_id')->constrained('positions')->onDelete('cascade');
             $table->foreignId('party_id')->constrained('parties')->onDelete('cascade');
             $table->string('electoral_affiliation')->nullable();
             $table->string('electoral_number')->nullable();
