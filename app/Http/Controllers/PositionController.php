@@ -3,24 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Office;
-use Exception;
+use App\Models\Position;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class OfficeController extends Controller
+class PositionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        try {
-            $office = Office::all();
-            return response()->json($office);
-        } catch (Exception $e) {
-            return response()->json(['message' => 'error', $e], 500);
-        }
+        $position = Position::all();
+        return response()->json($position);
     }
 
     /**
@@ -36,23 +31,27 @@ class OfficeController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $validations = Validator::make($request->all(), [
-                'name' => 'required|string'
-            ]);
-    
-            if($validations->fails()) {
-                return response()->json(['message' => 'Erro de validação']);
-            }
-    
-            $office = Office::create([
-                'name' => $request->name
-            ]);
-    
-            return response()->json($office);
-        } catch (Exception $e) {
-            return response()->json(['message' => 'error', $e], 500);
+        $validations = Validator::make($request->all(), [
+            'name' => 'required',
+            'description' => 'required',
+            'term_period' => 'required',
+            'jurisdiction' => 'required',
+            'requirements' => 'required'
+        ]);
+
+        if($validations->fails()) {
+            return response()->json("Erro de Validação");
         }
+
+        $position = Position::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'term_period' => $request->term_period,
+            'jurisdiction' => $request->jurisdiction,
+            'requirements' => $request->requirements
+        ]);
+
+        return response()->json($position);
     }
 
     /**

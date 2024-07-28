@@ -3,8 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CityController;
-use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\PartyController;
+use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\UserController;
@@ -15,7 +15,7 @@ Route::post('auth/login', [AuthController::class, 'login']);
 Route::post('register', [UserController::class, 'store']);
 Route::get('logout', [AuthController::class, 'logout']);
 Route::resource('post', PostController::class);
-Route::resource('office', OfficeController::class);
+Route::resource('position', PositionController::class);
 Route::resource('party', PartyController::class);
 Route::resource('city', CityController::class);
 Route::resource('state', StateController::class);
