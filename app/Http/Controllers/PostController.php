@@ -39,7 +39,8 @@ class PostController extends Controller
             $validations = Validator::make($request->all(), [
                 'description' => 'required|string',
                 'image_url' => 'string|nullable',
-                'user_id' => 'required'
+                'user_id' => 'required',
+                'candidate_id' => 'required'
             ]);
 
             if ($validations->fails()) {
@@ -51,10 +52,12 @@ class PostController extends Controller
                 'image_url' => $request->image_url,
                 'likes' => 0,
                 'dislikes' => 0,
-                'user_id' => $request->user_id
+                'user_id' => $request->user_id,
+                'candidate_id' => $request->candidate_id
             ]);
 
             $post->load('user');
+            $post->load('candidate');
 
             return response()->json($post);
         } catch (Exception $e) {

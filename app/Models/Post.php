@@ -14,15 +14,22 @@ class Post extends Model
         'image_url',
         'user_id',
         'likes',
+        'candidate_id',
         'dislikes'
     ];
 
     protected $with = [
-        'user'
+        'user',
+        'candidate'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function candidate()
+    {
+        return $this->belongsTo(Candidate::class);
     }
 }

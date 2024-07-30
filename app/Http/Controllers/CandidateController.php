@@ -47,13 +47,14 @@ class CandidateController extends Controller
                 'phone' => 'required',
                 'position_id' => 'required',
                 'party_id' => 'required',
+                'user_id' => 'required',
                 'electoral_affiliation' => 'nullable',
                 'electoral_number' => 'nullable',
                 'city_id' => 'required',
                 'state_id' => 'required'
             ]);
 
-            if($validations->fails()) {
+            if ($validations->fails()) {
                 return response()->json(['message' => 'Erro de validação']);
             }
 
@@ -67,6 +68,7 @@ class CandidateController extends Controller
                 'phone' => $request->phone,
                 'position_id' => $request->position_id,
                 'party_id' => $request->party_id,
+                'user_id' => $request->user_id,
                 'electoral_affiliation' => $request->electoral_affiliation,
                 'electoral_number' => $request->electoral_number,
                 'state_id' => $request->state_id,
@@ -74,9 +76,13 @@ class CandidateController extends Controller
                 'status' => 'pendente'
             ]);
 
+            $candidate->load('user');
+            $candidate->load('party');
+            $candidate->load('position');
+            $candidate->load('city');
+            $candidate->load('state');
+
             return response()->json($candidate);
-
-
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
         }

@@ -20,12 +20,13 @@ Route::resource('party', PartyController::class);
 Route::resource('city', CityController::class);
 Route::resource('state', StateController::class);
 Route::resource('candidates', CandidateController::class);
+Route::get('getCandidateByUserId/{id}', [UserController::class, 'getCandidateByUserId']);
 
 Route::get('cityPerStateId/{id}', [CityController::class, 'getCitiesByState']);
 
 Route::group(['middleware' => ['auth:sanctum', 'access_control']], function () {
     Route::resource('users', UserController::class);
     Route::get('me', [AuthController::class, 'me']);
-    
+
     Route::get('refresh', [AuthController::class, 'refresh']);
 });

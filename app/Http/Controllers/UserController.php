@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidate;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -115,5 +116,16 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
         }
+    }
+
+    public function getCandidateByUserId($userId)
+    {
+        $candidate = Candidate::where('user_id', $userId)->first();
+
+        if (!$candidate) {
+            return response()->json(['error' => 'Candidate not found for this user']);
+        }
+
+        return response()->json($candidate);
     }
 }
