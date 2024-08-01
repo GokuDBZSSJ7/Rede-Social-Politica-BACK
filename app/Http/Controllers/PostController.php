@@ -113,4 +113,34 @@ class PostController extends Controller
             return response()->json(['message' => 'error', $e], 500);
         }
     }
+
+    public function addLike($id)
+    {
+        $post = Post::find($id);
+
+        if (!$post) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+
+        $post->likes += 1;
+
+        $post->save();
+
+        return response()->json(['likes' => $post->likes]);
+    }
+
+    public function removeLike($id)
+    {
+        $post = Post::find($id);
+
+        if (!$post) {
+            return response()->json(['error' => 'Post not found'], 404);
+        }
+
+        $post->likes -= 1;
+
+        $post->save();
+
+        return response()->json(['likes' => $post->likes]);
+    }
 }
