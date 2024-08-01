@@ -6,6 +6,7 @@ use App\Models\Post;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -36,32 +37,52 @@ class PostController extends Controller
     public function store(Request $request)
     {
         try {
-            $validations = Validator::make($request->all(), [
+            $validated = $request->validate([
                 'description' => 'required|string',
-                'image_url' => 'string|nullable',
-                'user_id' => 'required',
-                'candidate_id' => 'required'
+                'user_id' => 'required|integer',
+                'candidate_id' => 'required|integer',
+                'image_url' => 'nullable|string',
             ]);
 
-            if ($validations->fails()) {
-                return response()->json(['message' => 'A validação falhou']);
+            $imageName = null;
+            $imageUrl = $request->input('image_url');
+
+            if ($imageUrl) {
+                $imagePath = 'public/images';
+
+                if (!Storage::exists($imagePath)) {
+                    Storage::makeDirectory($imagePath);
+                }
+
+                $parts = explode(',', $imageUrl);
+                if (count($parts) === 2) {
+                    $imageData = $parts[1];
+                    $imageName = time() . '.jpg';
+                    $imageFilePath = $imagePath . '/' . $imageName;
+
+                    Storage::put($imageFilePath, base64_decode($imageData));
+                } else {
+                    return response()->json(['message' => 'Formato de imagem base64 inválido'], 400);
+                }
             }
 
             $post = Post::create([
                 'description' => $request->description,
-                'image_url' => $request->image_url,
+                'image_url' => $imageFilePath,
                 'likes' => 0,
                 'dislikes' => 0,
                 'user_id' => $request->user_id,
                 'candidate_id' => $request->candidate_id
             ]);
 
+            $post->image_url = Storage::url('images/' . $imageName);
+
             $post->load('user');
             $post->load('candidate');
 
             return response()->json($post);
         } catch (Exception $e) {
-            return response()->json(['message' => 'error', $e], 500);
+            return response()->json(['message' => 'Erro ao processar a solicitação', 'error' => $e->getMessage()], 500);
         }
     }
 
