@@ -43,48 +43,33 @@ class PostController extends Controller
                 'candidate_id' => 'required|integer',
                 'image_url' => 'nullable|string',
             ]);
-
-            $imageName = null;
-            $imageUrl = $request->input('image_url');
-
-            if ($imageUrl) {
-                $imagePath = 'public/images';
-
-                if (!Storage::exists($imagePath)) {
-                    Storage::makeDirectory($imagePath);
-                }
-
-                $parts = explode(',', $imageUrl);
-                if (count($parts) === 2) {
-                    $imageData = $parts[1];
-                    $imageName = time() . '.jpg';
-                    $imageFilePath = $imagePath . '/' . $imageName;
-
-                    Storage::put($imageFilePath, base64_decode($imageData));
-                } else {
-                    return response()->json(['message' => 'Formato de imagem base64 inválido'], 400);
-                }
+    
+            $imagePath = null;
+            if ($request->image_url) {
+                $imageData = $request->image_url;
+                $base64Image = preg_replace('#^data:image/\w+;base64,#i', '', $imageData);
+                $imageName = time() . '.jpg';
+                $imagePath = 'images/' . $imageName;
+                Storage::disk('public')->put($imagePath, base64_decode($base64Image));
             }
-
-            $post = Post::create([
-                'description' => $request->description,
-                'image_url' => $imageFilePath,
-                'likes' => 0,
-                'dislikes' => 0,
-                'user_id' => $request->user_id,
-                'candidate_id' => $request->candidate_id
-            ]);
-
-            $post->image_url = Storage::url('images/' . $imageName);
-
+    
+            $data = $request->only(['description', 'user_id', 'candidate_id']);
+            if ($imagePath) {
+                $data['image_url'] = $imagePath;
+            }
+    
+            $post = Post::create($data);
+    
             $post->load('user');
             $post->load('candidate');
-
+    
             return response()->json($post);
         } catch (Exception $e) {
             return response()->json(['message' => 'Erro ao processar a solicitação', 'error' => $e->getMessage()], 500);
         }
     }
+    
+
 
     /**
      * Display the specified resource.
