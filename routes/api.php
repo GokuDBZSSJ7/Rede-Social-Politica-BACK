@@ -28,6 +28,8 @@ Route::put('approveCandidate/{id}', [PartyController::class, 'approveCandidate']
 
 Route::get('cityPerStateId/{id}', [CityController::class, 'getCitiesByState']);
 
+Route::get('filterPendentsCandidates', [PartyController::class, 'filterPendentsCandidates']);
+
 Route::group(['middleware' => ['auth:sanctum', 'access_control']], function () {
     Route::resource('users', UserController::class);
     Route::get('me', [AuthController::class, 'me']);
