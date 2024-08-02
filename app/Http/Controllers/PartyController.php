@@ -135,4 +135,11 @@ class PartyController extends Controller
 
         return response()->json($candidates);
     }
+
+    public function filterApprovedCandidates()
+    {
+        $candidates = Candidate::where('status', 'Candidato - Aprovado')->get();
+
+        return response()->json($candidates);
+    }
 }
