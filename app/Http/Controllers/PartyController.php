@@ -128,4 +128,11 @@ class PartyController extends Controller
 
         return response()->json($candidate);
     }
+
+    public function filterPendentsCandidates()
+    {
+        $candidates = Candidate::where('status', 'pendente')->get();
+
+        return response()->json($candidates);
+    }
 }
