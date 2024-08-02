@@ -23,6 +23,7 @@ Route::resource('candidates', CandidateController::class);
 Route::get('getCandidateByUserId/{id}', [UserController::class, 'getCandidateByUserId']);
 Route::put('like/{id}', [PostController::class, 'addLike']);
 Route::put('deslike/{id}', [PostController::class, 'removeLike']);
+Route::put('approveCandidate/{id}', [PartyController::class, 'approveCandidate']);
 
 
 Route::get('cityPerStateId/{id}', [CityController::class, 'getCitiesByState']);

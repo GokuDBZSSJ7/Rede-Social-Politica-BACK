@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Candidate;
 use App\Models\Party;
 use Exception;
 use Illuminate\Http\Request;
@@ -116,5 +117,15 @@ class PartyController extends Controller
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
         }
+    }
+
+    public function approveCandidate($id)
+    {
+        $candidate = Candidate::find($id);
+
+        $candidate->status = "Aprovado - Candidato";
+        $candidate->save();
+
+        return response()->json($candidate);
     }
 }
