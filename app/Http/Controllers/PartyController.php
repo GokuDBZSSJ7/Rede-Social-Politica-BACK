@@ -123,7 +123,7 @@ class PartyController extends Controller
     {
         $candidate = Candidate::find($id);
 
-        $candidate->status = "candidato_aprovado";
+        $candidate->status = "Candidato - Aprovado";
         $candidate->save();
 
         return response()->json($candidate);
