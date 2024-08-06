@@ -45,7 +45,7 @@ class PostController extends Controller
             ]);
 
             $imagePath = null;
-            if ($request->image_url) {
+            if ($request->has('image_url') && !empty($request->image_url)) {
                 $imageData = $request->image_url;
                 $base64Image = preg_replace('#^data:image/\w+;base64,#i', '', $imageData);
                 $imageName = time() . '.jpg';
@@ -60,8 +60,7 @@ class PostController extends Controller
 
             $post = Post::create($data);
 
-            $post->load('user');
-            $post->load('candidate');
+            $post->load(['user', 'candidate']);
 
             return response()->json($post);
         } catch (Exception $e) {

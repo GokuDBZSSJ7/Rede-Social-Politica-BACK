@@ -43,7 +43,7 @@ class Post extends Model
             return asset('storage/' . $value);
         } else {
             // return asset('images/img-padrao.jpg');
-            return null;
+            return 'null';
         }
     }
 }
