@@ -16,7 +16,7 @@ class PostController extends Controller
     public function index()
     {
         try {
-            $post = Post::all();
+            $post = Post::orderBy('created_at', 'desc')->get();
             return response()->json($post);
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
@@ -43,7 +43,7 @@ class PostController extends Controller
                 'candidate_id' => 'required|integer',
                 'image_url' => 'nullable|string',
             ]);
-    
+
             $imagePath = null;
             if ($request->image_url) {
                 $imageData = $request->image_url;
@@ -52,23 +52,23 @@ class PostController extends Controller
                 $imagePath = 'images/' . $imageName;
                 Storage::disk('public')->put($imagePath, base64_decode($base64Image));
             }
-    
+
             $data = $request->only(['description', 'user_id', 'candidate_id']);
             if ($imagePath) {
                 $data['image_url'] = $imagePath;
             }
-    
+
             $post = Post::create($data);
-    
+
             $post->load('user');
             $post->load('candidate');
-    
+
             return response()->json($post);
         } catch (Exception $e) {
             return response()->json(['message' => 'Erro ao processar a solicitação', 'error' => $e->getMessage()], 500);
         }
     }
-    
+
 
 
     /**
