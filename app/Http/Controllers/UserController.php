@@ -6,6 +6,7 @@ use App\Models\Candidate;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -45,11 +46,27 @@ class UserController extends Controller
                 'gender' => 'nullable',
                 'birthdate' => 'nullable',
                 'city_id' => 'nullable',
-                'state_id' => 'nullable'
+                'state_id' => 'nullable',
+                'image_url' => 'required'
+
             ]);
 
             if ($validations->fails()) {
                 return response()->json(['message' => 'A validação falhou.']);
+            }
+
+            $imagePath = null;
+            if ($request->has('image_url') && !empty($request->image_url)) {
+                $imageData = $request->image_url;
+                $base64Image = preg_replace('#^data:image/\w+;base64,#i', '', $imageData);
+                $imageName = time() . '.jpg';
+                $imagePath = 'images/candidate/' . $imageName;
+                Storage::disk('public')->put($imagePath, base64_decode($base64Image));
+            }
+
+            $data = $request->only(['description', 'user_id', 'candidate_id']);
+            if ($imagePath) {
+                $data['image_url'] = $imagePath;
             }
 
             $user = User::create([

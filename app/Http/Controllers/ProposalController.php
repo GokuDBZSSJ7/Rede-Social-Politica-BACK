@@ -24,20 +24,33 @@ class ProposalController extends Controller
     {
         //
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validations = Validator::make($request->all(), [
-            'title' => ''
+            'title' => 'required',
+            'description' => 'required',
+            'candidate_id' => 'required',
+            'expected_impact' => 'nullable'
         ]);
+
+        if ($validations->fails()) {
+            return response()->json("Validação Falhou");
+        }
+
+        $proposal = Proposal::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'candidate_id' => $request->candidate_id,
+            'expected_impact' => $request->expected_impact
+        ]);
+
+        return response()->json($proposal);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
+
+
+
     public function show(string $id)
     {
         //

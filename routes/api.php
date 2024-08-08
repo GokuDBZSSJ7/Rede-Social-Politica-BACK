@@ -6,6 +6,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\PartyController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,8 @@ Route::get('cityPerStateId/{id}', [CityController::class, 'getCitiesByState']);
 
 Route::get('filterPendentsCandidates', [PartyController::class, 'filterPendentsCandidates']);
 Route::get('filterApprovedCandidates', [PartyController::class, 'filterApprovedCandidates']);
+
+Route::resource('proposal', ProposalController::class);
 
 Route::group(['middleware' => ['auth:sanctum', 'access_control']], function () {
     Route::resource('users', UserController::class);

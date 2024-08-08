@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class CandidateController extends Controller
@@ -51,7 +52,7 @@ class CandidateController extends Controller
                 'electoral_affiliation' => 'nullable',
                 'electoral_number' => 'nullable',
                 'city_id' => 'required',
-                'state_id' => 'required'
+                'state_id' => 'required',
             ]);
 
             if ($validations->fails()) {
@@ -73,8 +74,11 @@ class CandidateController extends Controller
                 'electoral_number' => $request->electoral_number,
                 'state_id' => $request->state_id,
                 'city_id' => $request->city_id,
+                'image_url' => $request->image_url,
                 'status' => 'pendente'
             ]);
+
+
 
             $candidate->load('user');
             $candidate->load('party');

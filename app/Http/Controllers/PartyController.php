@@ -17,6 +17,9 @@ class PartyController extends Controller
     {
         try {
             $party = Party::all();
+            $party->load('city');
+            $party->load('state');
+            $party->load('user');
             return response()->json($party);
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
@@ -45,7 +48,8 @@ class PartyController extends Controller
                 'description' => 'required|string',
                 'statute' => 'required',
                 'state_id' => 'required',
-                'city_id' => 'required'
+                'city_id' => 'required',
+                'user_id' => 'required'
             ]);
 
             if ($validations->fails()) {
@@ -60,8 +64,12 @@ class PartyController extends Controller
                 'description' => $request->description,
                 'statute' => $request->statute,
                 'state_id' => $request->state_id,
-                'city_id' => $request->city_id
+                'city_id' => $request->city_id,
+                'user_id' => $request->user_id
             ]);
+
+            $party->load('city');
+            $party->load('state');
 
             return response()->json($party);
         } catch (Exception $e) {

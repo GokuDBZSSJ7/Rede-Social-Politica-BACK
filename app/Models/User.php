@@ -25,7 +25,8 @@ class User extends Authenticatable
         'gender',
         'birthdate',
         'city_id',
-        'state_id'
+        'state_id',
+        'image_url',
     ];
 
     /**
@@ -64,5 +65,18 @@ class User extends Authenticatable
     public function candidate()
     {
         return $this->hasOne(Candidate::class, 'user_id', 'id');
+    }
+
+    public function getImageUrlAttribute($value): string
+    {
+        if ($value) {
+            if (str_contains($value, 'storage')) {
+                return asset($value);
+            }
+            return asset('storage/' . $value);
+        } else {
+            // return asset('images/img-padrao.jpg');
+            return 'null';
+        }
     }
 }
