@@ -16,6 +16,7 @@ class CommentController extends Controller
     {
         try {
             $comment = Comment::all();
+            $comment->load('replie');
             return response()->json($comment);
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
@@ -105,7 +106,7 @@ class CommentController extends Controller
         try {
             $comment = Comment::find($id);
             $comment->delete();
-            return response()->json($comment);
+            return response()->json(['message' => 'Deletado com sucesso'], 200);
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
         }

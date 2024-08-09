@@ -51,9 +51,10 @@ class ProposalController extends Controller
 
 
 
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $proposal = Proposal::find($id);
+        return response()->json($proposal);
     }
 
     /**
@@ -67,16 +68,21 @@ class ProposalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $proposal = Proposal::find($id);
+        $proposal->update($request->all);
+
+        return response()->json($proposal);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $proposal = Proposal::findOrFail($id);
+        $proposal->delete();
+        return response()->json(['message' => 'Deletado com sucesso'], 200);
     }
 }

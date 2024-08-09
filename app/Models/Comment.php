@@ -13,11 +13,16 @@ class Comment extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function post()
     {
-        return $this->hasOne(Post::class, 'post_id');
+        return $this->belongsTo(Post::class, 'post_id');
+    }
+
+    public function replie()
+    {
+        return $this->belongsTo(Replie::class);
     }
 }

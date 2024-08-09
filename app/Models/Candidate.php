@@ -21,7 +21,8 @@ class Candidate extends Model
         'party',
         'position',
         'state',
-        'city'
+        'city',
+        'currentPosition'
     ];
 
     public function user()
@@ -45,5 +46,10 @@ class Candidate extends Model
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    public function currentPosition()
+    {
+        return $this->belongsTo(CurrentPosition::class);
     }
 }

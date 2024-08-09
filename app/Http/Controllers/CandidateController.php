@@ -18,6 +18,12 @@ class CandidateController extends Controller
     {
         try {
             $candidate = Candidate::all();
+            $candidate->load('user');
+            $candidate->load('party');
+            $candidate->load('position');
+            $candidate->load('city');
+            $candidate->load('state');
+            $candidate->load('currentPosition');
             return response()->json($candidate);
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
@@ -80,11 +86,7 @@ class CandidateController extends Controller
 
 
 
-            $candidate->load('user');
-            $candidate->load('party');
-            $candidate->load('position');
-            $candidate->load('city');
-            $candidate->load('state');
+
 
             return response()->json($candidate);
         } catch (Exception $e) {

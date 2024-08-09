@@ -2,24 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Replie;
-use Exception;
+use App\Models\CurrentPosition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ReplieController extends Controller
+class CurrentPositionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        try {
-            $replie = Replie::all();
-            return response()->json($replie);
-        } catch (Exception $e) {
-            return response()->json(['message' => 'error', $e], 500);
-        }
+        $currentPosition = CurrentPosition::all();
+        return response()->json($currentPosition);
     }
 
     /**
@@ -36,28 +31,31 @@ class ReplieController extends Controller
     public function store(Request $request)
     {
         $validations = Validator::make($request->all(), [
-            'text' => 'required',
-            'comment_id' => 'required'
+            'title' => 'required',
+            'description' => 'required',
+            'candidate_id' => 'required'
         ]);
 
         if ($validations->fails()) {
-            return response()->json(['message' => 'Erro de validação'], 500);
+            return response()->json(['message' => 'erro de validação'], 500);
         }
 
-        $replie = Replie::create([
-            'text' => $request->text,
-            'comment_id' => $request->comment_id
+        $currentPosition = CurrentPosition::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'candidate_id' => $request->candidate_id
         ]);
 
-        return response()->json($replie);
+        return response()->json($currentPosition);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $currentPosition = CurrentPosition::find($id);
+        return response()->json($currentPosition);
     }
 
     /**
@@ -73,10 +71,10 @@ class ReplieController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $replie = Replie::find($id);
-        $replie->update($request->all());
+        $currentPosition = CurrentPosition::find($id);
+        $currentPosition->update($request->all());
 
-        return response()->json($replie);
+        return response()->json($currentPosition);
     }
 
     /**
@@ -84,8 +82,8 @@ class ReplieController extends Controller
      */
     public function destroy($id)
     {
-        $replie = Replie::find($id);
-        $replie->delete();
+        $currentPosition = CurrentPosition::find($id);
+        $currentPosition->delete();
 
         return response()->json(['message' => 'Deletado com sucesso'], 200);
     }

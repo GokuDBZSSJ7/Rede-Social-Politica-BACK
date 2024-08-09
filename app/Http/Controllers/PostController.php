@@ -113,7 +113,7 @@ class PostController extends Controller
         try {
             $post = Post::find($id);
             $post->delete();
-            return response()->json(['message' => 'Deletado com sucesso!']);
+            return response()->json(['message' => 'Deletado com sucesso'], 200);
         } catch (Exception $e) {
             return response()->json(['message' => 'error', $e], 500);
         }
