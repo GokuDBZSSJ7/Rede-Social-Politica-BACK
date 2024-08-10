@@ -47,7 +47,7 @@ class UserController extends Controller
                 'birthdate' => 'nullable',
                 'city_id' => 'nullable',
                 'state_id' => 'nullable',
-                'image_url' => 'required'
+                'image_url' => 'nullable'
 
             ]);
 
